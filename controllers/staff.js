@@ -74,5 +74,6 @@ const allstaffs = (req, res) => {
 }
 
 module.exports = {
-    newstaff
+    newstaff,
+    allstaffs
 }
