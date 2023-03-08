@@ -20,4 +20,4 @@ const salesmodel = new schema({
     }
 });
 
-module.exports = mongoose.model('Sale', salesmodel, 'sale');
+module.exports = mongoose.model('Sales', salesmodel, 'sales');

@@ -25,4 +25,4 @@ const stockmodel = new schema({
     }
 });
 
-module.exports =mongoose.model('Stock', stockmodel,'stock');
+module.exports =mongoose.model('Stocks', stockmodel,'stocks');

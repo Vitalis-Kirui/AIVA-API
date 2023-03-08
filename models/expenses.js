@@ -17,4 +17,4 @@ const expensesmodel = new schema({
     }
 });
 
-module.exports = mongoose.model('Expense', expensesmodel, 'expense');
+module.exports = mongoose.model('Expenses', expensesmodel, 'expenses');

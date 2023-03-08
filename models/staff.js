@@ -45,4 +45,4 @@ const staffmodel = new schema({
 
 })
 
-module.exports = mongoose.model('Staff', staffmodel, 'staff');
+module.exports = mongoose.model('Staff', staffmodel, 'staffs');
