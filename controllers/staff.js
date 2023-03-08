@@ -49,6 +49,30 @@ const newstaff = (req, res) => {
     
 }
 
+// Fetching all the staffs
+const allstaffs = (req, res) => {
+
+    Staff.find()
+        .sort({ 'firstname': 1 })
+        .then((error, staffs) => {
+            if (error) {
+                res.json({
+                    message: 'An error occurred while fetching staffs',
+                    error : error
+                });
+            }
+            if (staffs) {
+
+                let total = staffs.length;
+                res.json({
+                    number: total,
+                    staffs : staffs
+                });
+            }
+            })
+    
+}
+
 module.exports = {
     newstaff
 }
