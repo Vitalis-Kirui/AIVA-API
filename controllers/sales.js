@@ -46,7 +46,24 @@ const allsales = (req, res) => {
         })
 };
 
+// Today's sales
+const todaysales = (req, res) => { 
+
+    Sales.find({ createdAt: { $lt: new Date(), $gt: new Date(new Date().getTime() - (24 * 60 * 60 * 1000)) } }).sort({ createdAt: -1 })
+        .then((todaysales) => {
+
+            let totalsales = todaysales.length;
+
+            res.json({ total: totalsales, sales: todaysales })
+        })
+        .catch((error) => {
+            console.log(error)
+         })
+
+};
+
 module.exports = {
     newsale,
-    allsales
+    allsales,
+    todaysales,
 }
