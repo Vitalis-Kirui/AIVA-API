@@ -46,7 +46,24 @@ const allcyberservices = (req, res) => {
         })
 };
 
+// Today's cyber services
+const todaycyberservices = (req, res) => { 
+
+    Cyber.find({ createdAt: { $lt: new Date(), $gt: new Date(new Date().getTime() - (24 * 60 * 60 * 1000)) } }).sort({ createdAt: -1 })
+        .then((todaycyberservices) => {
+
+            let totalservices = todaycyberservices.length;
+
+            res.json({ total: totalservices, cyberservices: todaycyberservices })
+        })
+        .catch((error) => {
+            console.log(error)
+         })
+
+};
+
 module.exports = {
     newcyberservice,
-    allcyberservices
+    allcyberservices,
+    todaycyberservices
 }
