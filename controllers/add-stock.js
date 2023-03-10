@@ -1,4 +1,3 @@
-const { response } = require('express');
 const Stocks = require('../models/add-stock');
 
 // Saving new stock
