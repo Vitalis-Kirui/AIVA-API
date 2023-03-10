@@ -20,6 +20,33 @@ const newcyberservice = (req, res) => {
 
 };
 
+// Fetching all registered cyber services
+const allcyberservices = (req, res) => { 
+
+    Cyber.find()
+        .sort({ 'createdAt': 1 })
+        .then((registeredservices) => { 
+
+            let totalservices = registeredservices.length;
+
+            res.json({
+                
+                total: totalservices,
+                cyberservices: registeredservices
+            })
+
+                .catch((error) => { 
+                    console.log(error);
+                    res.json({
+                        message: 'An error occurred while fetching cyber services',
+                        error: error
+                    });
+                })
+
+        })
+};
+
 module.exports = {
-    newcyberservice
+    newcyberservice,
+    allcyberservices
 }
