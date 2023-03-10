@@ -90,8 +90,26 @@ const fetchceos = (req, res) => {
 
 };
 
+// Fetching management staffs
+const fetchingmanagement = (req, res) => { 
+
+    Staff.find({ role: 'management' })
+        .sort({ 'firstname': 1 })
+        .then((managementstaffs) => {
+
+            res.json({ok : true, management : managementstaffs})
+            
+        })
+        .catch((error) => {
+            res.json({ ok: false, message: "There was an error fetching data" })
+            console.log(error)
+    })
+
+};
+
 module.exports = {
     newstaff,
     allstaffs,
-    fetchceos
+    fetchceos,
+    fetchingmanagement
 }
