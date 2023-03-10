@@ -46,7 +46,24 @@ const allexpenses = (req, res) => {
         })
 };
 
+// Today's expenses
+const todayexpenses = (req, res) => { 
+
+    Expenses.find({ createdAt: { $lt: new Date(), $gt: new Date(new Date().getTime() - (24 * 60 * 60 * 1000)) } }).sort({ createdAt: -1 })
+        .then((todayexpenses) => {
+
+            let totalexpenses = todayexpenses.length;
+
+            res.json({ total: totalexpenses, expenses: todayexpenses })
+        })
+        .catch((error) => {
+            console.log(error)
+         })
+
+};
+
 module.exports = {
     newexpense,
-    allexpenses
+    allexpenses,
+    todayexpenses
 }
