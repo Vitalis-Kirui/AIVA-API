@@ -33,6 +33,28 @@ const savingnewstock = (req, res) => {
 
 };
 
+// Fetching all the stocks
+const fetchingallstocks = (req, res) => { 
+
+    Stocks.find()
+        .then((stocks) => { 
+
+            let totalstocks = stocks.length;
+            res.json({
+                total: totalstocks,
+                stocks: stocks
+            })
+                .catch((error) => { 
+                    console.log(error);
+                    res.json({
+                        message: 'An error occurred while fetching data for all stocks',
+                        error: error
+                    })
+                })
+        })
+};
+
 module.exports = {
-    savingnewstock
+    savingnewstock,
+    fetchingallstocks
 }
