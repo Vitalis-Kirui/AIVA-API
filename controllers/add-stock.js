@@ -37,6 +37,7 @@ const savingnewstock = (req, res) => {
 const fetchingallstocks = (req, res) => { 
 
     Stocks.find()
+        .sort({productname : 1})
         .then((stocks) => { 
 
             let totalstocks = stocks.length;
