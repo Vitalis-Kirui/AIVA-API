@@ -25,6 +25,10 @@ const cybermodel = new schema({
     transactioncode: {
         type: String
     }
-});
+},
+    {
+        timestamps: true
+    }
+);
 
 module.exports = mongoose.model('Cyber', cybermodel,'cyber');

@@ -18,6 +18,9 @@ const salesmodel = new schema({
     transactioncode: {
         type: String
     }
+},
+    {
+    timestamps: true
 });
 
 module.exports = mongoose.model('Sales', salesmodel, 'sales');

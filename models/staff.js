@@ -43,6 +43,9 @@ const staffmodel = new schema({
         require: true
     }
 
-})
+},
+    {
+    timestamps: true
+});
 
 module.exports = mongoose.model('Staff', staffmodel, 'staffs');

@@ -23,6 +23,10 @@ const stockmodel = new schema({
         type: Number,
         require: true
     }
-});
+},
+    {
+        timestamps: true
+    }
+);
 
 module.exports =mongoose.model('Stocks', stockmodel,'stocks');
