@@ -1,69 +1,78 @@
-const Sales = require('../models/sales');
+const Sales = require("../models/sales");
 
 // Saving new sale
-const newsale = (req, res) => { 
+const newsale = async (req, res) => {
 
-    let salesdata = req.body;
+    try {
+        const salesdetails = req.body;
 
-    Sales.save(salesdata)
-        .then((success) => {
-            res.json({
-                message: 'Sale registered successfully'
-            })
+        const newsale = new Sales(salesdetails);
+
+        await newsale.save();
+
+        res.json({
+            success: true,
+            message : "New sale registered successfully"
         })
-        .catch((error) => { 
-            console.log(error)
-            res.json({
-                message: 'There was an error registering the sale'
-            })
-        });
 
-};
+
+        
+    }
+    catch (error) {
+
+        res.json({
+            success: false,
+            message: "There was an error saving the sale",
+            error: error.message
+        })
+    
+    }
+    
+}
 
 // Fetching all registered sales
-const allsales = (req, res) => { 
+const allsales = (req, res) => {
+  Sales.find()
+    .sort({ createdAt: 1 })
+    .then((registeredsales) => {
+      let totalsales = registeredsales.length;
 
-    Sales.find()
-        .sort({ 'createdAt': 1 })
-        .then((registeredsales) => { 
+      res.json({
+        total: totalsales,
+        sales: registeredsales,
+      });
+    })
 
-            let totalsales = registeredsales.length;
-
-            res.json({
-                
-                total: totalsales,
-                sales: registeredsales
-            })
-
-                .catch((error) => { 
-                    console.log(error);
-                    res.json({
-                        message: 'An error occurred while fetching sales',
-                        error: error
-                    });
-                })
-
-        })
+    .catch((error) => {
+      console.log(error);
+      res.json({
+        message: "An error occurred while fetching sales",
+        error: error,
+      });
+    });
 };
 
 // Today's sales
-const todaysales = (req, res) => { 
+const todaysales = (req, res) => {
+  Sales.find({
+    createdAt: {
+      $lt: new Date(),
+      $gt: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
+    },
+  })
+    .sort({ createdAt: -1 })
+    .then((todaysales) => {
+      let totalsales = todaysales.length;
 
-    Sales.find({ createdAt: { $lt: new Date(), $gt: new Date(new Date().getTime() - (24 * 60 * 60 * 1000)) } }).sort({ createdAt: -1 })
-        .then((todaysales) => {
-
-            let totalsales = todaysales.length;
-
-            res.json({ total: totalsales, sales: todaysales })
-        })
-        .catch((error) => {
-            console.log(error)
-         })
-
+      res.json({ total: totalsales, sales: todaysales });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 module.exports = {
-    newsale,
-    allsales,
-    todaysales,
-}
+  newsale,
+  allsales,
+  todaysales,
+};
