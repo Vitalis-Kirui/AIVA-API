@@ -5,9 +5,7 @@ const newcyberservice = async (req, res) => {
   try {
     const servicedata = req.body;
 
-    const cyberservice = new Cyber({
-      servicedata,
-    });
+    const cyberservice = new Cyber(servicedata,);
 
     await cyberservice.save();
 

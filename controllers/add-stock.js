@@ -13,9 +13,7 @@ const savingnewstock = async (req, res) => {
       });
     }
 
-    const product = new Stocks({
-      productdata
-    });
+    const product = new Stocks(productdata);
 
     await product.save();
 
