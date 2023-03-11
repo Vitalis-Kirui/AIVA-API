@@ -3,6 +3,13 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyparser = require('body-parser');
 
+// Routes
+const stockroutes = require('./routes/add-stock');
+const cyberroutes = require('./routes/cyber');
+const expensesroutes = require('./routes/expenses');
+const salesroutes = require('./routes/sales');
+const staffroutes = require('./routes/staff');
+
 // Local files
 const config = require('./config/config-variables');
 
@@ -32,3 +39,19 @@ mongoose.connect(config.dbconnection)
 app.get('', (req, res) => { 
     res.send('Hello from Server');
 })
+
+// Using routes
+// staff routes
+app.use('/staffs', staffroutes);
+
+// stock routes
+app.use('/stock', stockroutes);
+
+// Cyber routes
+app.use('/cyber', cyberroutes);
+
+// expenses routes
+app.use('/expenses', expensesroutes);
+
+//sales routes
+app.use('/sales', salesroutes);
