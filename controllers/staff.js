@@ -1,75 +1,63 @@
 const Staff = require('../models/staff');
 
 // Adding new staff
-const newstaff = (req, res) => {
+const newstaff = async (req, res) => { 
+    try {
 
-    const formdata = req.body;
+        const newstaffdetails = req.body;
 
-    Staff.find({ nationalid: formdata.nationalid }, (error, staff) => { 
-
-        if (error) {
-            console.log(error);
-
-            res.json({
-                message: 'An error occurred',
-                error : error
-            })
-        }
-        if (staff) {
-            
-            res.json({
-                message: 'Staff with the same national id is already registered'
-            })
-        }
-
-        else {
-
-            let newstaff = new Staff(formdata);
-
-            // Saving staff
-            newstaff.save()
-                .then(success => {
-                    res.json({
-                        message: 'Staff is successfully registered',
-                    });
-                })
-                .catch(error => { 
-
-                    res.json({
-                        message: 'There was an error saving staff',
-                        error : error
-                    });
-
-                })
-            
-        }
+        const existingstaff = await Staff.find({ nationalid: newstaffdetails.nationalid })
         
+        if (existingstaff) {
 
-    })
-    
-}
+            res.json({
+                success: false,
+                message: `A staff with the ${newstaffdetails.nationalid} already registered}`
+            })
+            
+        }
+
+        const newstaff = new Staff(newstaffdetails);
+
+        await newstaff.save();
+
+        res.json({
+            success: true,
+            message:"New staff successfully registered"
+        })
+        
+    }
+    catch (error) {
+
+        res.json({
+            success: false,
+            message: "Error occurred while saving staff details",
+            error: error.message
+        })
+        
+    }
+};
 
 // Fetching all the staffs
 const allstaffs = (req, res) => {
 
     Staff.find()
         .sort({ 'firstname': 1 })
-        .then((error, staffs) => {
-            if (error) {
-                res.json({
-                    message: 'An error occurred while fetching staffs',
-                    error : error
-                });
-            }
-            if (staffs) {
+        .then((staffs) => {
 
-                let total = staffs.length;
-                res.json({
-                    number: total,
-                    staffs : staffs
-                });
-            }
+            res.json({
+                success: true,
+                staffs: staffs
             })
+            
+        })
+        .catch((error) => {
+            res.json({
+                success: false,
+                message: "There was an error fetching staffs details.",
+                error: error.message
+        })
+    })
     
 }
 
@@ -80,7 +68,7 @@ const fetchingceos = (req, res) => {
         .sort({ 'firstname': 1 })
         .then((ceostaffs) => {
 
-            res.json({ok : true, CEOs : costaffs})
+            res.json({ok : true, CEOs : ceostaffs})
             
         })
         .catch((error) => {
