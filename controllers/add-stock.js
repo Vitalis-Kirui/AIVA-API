@@ -7,9 +7,9 @@ const savingnewstock = async (req, res) => {
       
         const productdata = req.body;
         
-        const existingProduct = await Stocks.find({ productname: productdata.productname });
+        const existingproduct = await Stocks.find({ productname: productdata.productname });
 
-        if (existingProduct) {
+        if (existingproduct) {
         
       return res.status(409).json({
         success: false,
