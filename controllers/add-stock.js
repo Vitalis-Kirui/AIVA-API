@@ -2,42 +2,34 @@ const Stocks = require('../models/add-stock');
 
 // Saving new stock
 const savingnewstock = async (req, res) => {
+  try {
+    const productdata = req.body;
 
-    try {
-      
-        const productdata = req.body;
-        
-        const existingproduct = await Stocks.find({ productname: productdata.productname });
-
-        if (existingproduct) {
-        
+    const existingProduct = await Stocks.findOne({ productname: productdata.productname});
+    if (existingProduct) {
       return res.status(409).json({
         success: false,
         message: `Product with name ${productdata.productname} already exists`,
       });
-            
     }
 
-    const product = new Stocks(productdata);
+    const product = new Stocks({
+      productdata
+    });
 
     await product.save();
 
     res.status(201).json({
       success: true,
-      message: 'Product saved successfully',
+      message: "Product saved successfully",
     });
-        
-    }
-    catch (error) {
-        
+  } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Error saving product',
+      message: "Error saving product",
       error: error.message,
     });
-        
-    }
-    
+  }
 };
 
 // Fetching all the stocks
