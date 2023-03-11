@@ -19,3 +19,5 @@ router.get('/supervisors', staffcontrollers.fetchingsupervisors);
 
 // Attendants route
 router.get('/attendants', staffcontrollers.fetchingattendants);
+
+module.exports = router;

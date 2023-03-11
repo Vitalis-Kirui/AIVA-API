@@ -10,3 +10,5 @@ router.get('/all-sales', salescontrollers.allsales);
 
 // today sales
 router.get('/today-sales', salescontrollers.todaysales);
+
+module.exports = router;

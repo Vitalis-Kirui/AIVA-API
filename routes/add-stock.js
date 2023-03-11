@@ -7,3 +7,5 @@ router.post('/new-stock', stockcontrollers.savingnewstock);
 
 // Fetching all the stock
 router.get('/all-stocks', stockcontrollers.fetchingallstocks);
+
+module.exports = router;

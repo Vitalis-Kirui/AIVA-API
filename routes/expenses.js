@@ -10,3 +10,6 @@ router.get('/all-expenses', expensescontrollers.allexpenses);
 
 // Today expenses route
 router.get('/today-expenses', expensescontrollers.todayexpenses);
+
+
+module.exports = router;

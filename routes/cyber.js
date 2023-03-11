@@ -10,3 +10,5 @@ router.get('/all-cyber-services', cybercontrollers.allcyberservices);
 
 // Today's cyber service route
 router.get('/today-cyber-services', cybercontrollers.todaycyberservices);
+
+module.exports = router;
