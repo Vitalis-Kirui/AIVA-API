@@ -1,42 +1,49 @@
 const Stocks = require('../models/add-stock');
 
 // Saving new stock
-const savingnewstock = (req, res) => { 
+const savingnewstock = async (req, res) => {
 
-    let stockdata = req.body;
-
-    Stocks.find({ productname: stockdata.productname }), (error, existingproduct) => {
-
-        if (error) {
-            res.json(error);
-            console.log(error);
-        }
-        if (existingproduct) { 
-            res.json({message : 'The product with name ' + stockdata.productname + ' already exists'})
-        }
-        else {
-
-            // Proceeding to save
-            Stocks.save(stockdata)
-                .then((success) => {
-                    res.json({ message: 'Products added successfully' })
-                })
-                .catch((error) => { 
-                    console.log(error);
-                    res.json(error);
-                })
-            
-        }
+    try {
+      
+        const productdata = req.body;
         
+        const existingProduct = await Stocks.find({ productname: productdata.productname });
+
+        if (existingProduct) {
+        
+      return res.status(409).json({
+        success: false,
+        message: `Product with name ${productdata.productname} already exists`,
+      });
+            
     }
 
+    const product = new Stocks(productdata);
+
+    await product.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'Product saved successfully',
+    });
+        
+    }
+    catch (error) {
+        
+    res.status(500).json({
+      success: false,
+      message: 'Error saving product',
+      error: error.message,
+    });
+        
+    }
+    
 };
 
 // Fetching all the stocks
 const fetchingallstocks = (req, res) => { 
-
-    Stocks.find()
-        .sort({productname : 1})
+    
+    Stocks.find().sort({productname : 1})
         .then((stocks) => { 
 
             let totalstocks = stocks.length;
@@ -44,13 +51,14 @@ const fetchingallstocks = (req, res) => {
                 total: totalstocks,
                 stocks: stocks
             })
-                .catch((error) => { 
+                })
+                
+        .catch(error => {
                     console.log(error);
                     res.json({
                         message: 'An error occurred while fetching data for all stocks',
                         error: error
                     })
-                })
         })
 };
 
