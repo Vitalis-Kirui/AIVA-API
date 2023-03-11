@@ -6,16 +6,16 @@ const newstaff = async (req, res) => {
 
         const newstaffdetails = req.body;
 
-        const existingstaff = await Staff.find({ nationalid: newstaffdetails.nationalid })
+        const existingstaff = await Staff.findOne({ nationalid: newstaffdetails.nationalid });
         
         if (existingstaff) {
 
             res.json({
                 success: false,
-                message: `A staff with the ${newstaffdetails.nationalid} already registered}`
+                message: `A staff with the ${newstaffdetails.nationalid} already registered`
             })
             
-        }
+        };
 
         const newstaff = new Staff(newstaffdetails);
 
@@ -45,8 +45,11 @@ const allstaffs = (req, res) => {
         .sort({ 'firstname': 1 })
         .then((staffs) => {
 
+            const totalstaffs = staffs.length;
+
             res.json({
                 success: true,
+                total: totalstaffs,
                 staffs: staffs
             })
             
