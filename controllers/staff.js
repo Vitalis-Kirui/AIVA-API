@@ -1,41 +1,35 @@
 const Staff = require('../models/staff');
 
 // Adding new staff
-const newstaff = async (req, res) => { 
-    try {
+const newstaff = async (req, res) => {
+  try {
+    const staffdata = req.body;
 
-        const newstaffdetails = req.body;
-
-        const existingstaff = await Staff.findOne({ nationalid: newstaffdetails.nationalid });
-        
-        if (existingstaff) {
-
-            res.json({
-                success: false,
-                message: `A staff with the ${newstaffdetails.nationalid} already registered`
-            })
-            
-        };
-
-        const newstaff = new Staff(newstaffdetails);
-
-        await newstaff.save();
-
-        res.json({
-            success: true,
-            message:"New staff successfully registered"
-        })
-        
+    const existingstaff = await Staff.findOne({
+      nationalid: staffdata.nationalid,
+    });
+    if (existingstaff) {
+      return res.status(409).json({
+        success: false,
+        message: `Staff with id number ${staffdata.nationalid} already exists`,
+      });
     }
-    catch (error) {
 
-        res.json({
-            success: false,
-            message: "Error occurred while saving staff details",
-            error: error.message
-        })
-        
-    }
+    const newstaff = new Staff(staffdata);
+
+    await newstaff.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Staff saved successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error saving staff",
+      error: error.message,
+    });
+  }
 };
 
 // Fetching all the staffs
