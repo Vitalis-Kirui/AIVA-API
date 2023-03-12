@@ -11,6 +11,10 @@ const salesmodel = new schema({
         type: String,
         require: true
     },
+    quantity:{
+        type: Number,
+        require: true
+    },
     payment: {
         type: String,
         require: true
