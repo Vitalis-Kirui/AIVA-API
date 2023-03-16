@@ -148,12 +148,33 @@ const fetchingsinglestaff = (req, res) => {
     
 }
 
+// Deleting staff data
+const deletestaff = (req, res) => {
+  let id = req.params.id;
+
+  Staff.findByIdAndDelete(id)
+    .then((success) => {
+      res.json({
+        success: true,
+        message: "The staff was deleted successfully",
+      });
+    })
+    .catch((error) => {
+      res.json({
+        success: false,
+        message: "There was an error deleting the staff",
+        error: error.message,
+      });
+    });
+};
+
 module.exports = {
-    newstaff,
-    allstaffs,
-    fetchingceos,
-    fetchingmanagement,
-    fetchingsupervisors,
-    fetchingattendants,
-    fetchingsinglestaff
-}
+  newstaff,
+  allstaffs,
+  fetchingceos,
+  fetchingmanagement,
+  fetchingsupervisors,
+  fetchingattendants,
+  fetchingsinglestaff,
+  deletestaff
+};
