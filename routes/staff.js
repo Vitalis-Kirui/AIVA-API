@@ -21,6 +21,9 @@ router.get('/supervisors', staffcontrollers.fetchingsupervisors);
 router.get('/attendants', staffcontrollers.fetchingattendants);
 
 // Fetching single staff details
-router.get('/staff/:id', staffcontrollers.fetchingsinglestaff)
+router.get('/staff/:id', staffcontrollers.fetchingsinglestaff);
+
+// Deleting a single staff
+router.delete('/staff/:id', staffcontrollers.deletestaff);
 
 module.exports = router;
