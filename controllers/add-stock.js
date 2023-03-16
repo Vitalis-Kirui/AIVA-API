@@ -52,7 +52,28 @@ const fetchingallstocks = (req, res) => {
         })
 };
 
+// Fetching a single stock
+const fetchingsinglestock = (req, res) => {
+  const id = req.params.id;
+
+  Stocks.find({ _id: id })
+    .then((success) => {
+      res.json({
+        success: true,
+        stockdata: success,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        success: false,
+        message: "There an error fetchin stock data",
+        error: error.message,
+      });
+    });
+};
+
 module.exports = {
     savingnewstock,
-    fetchingallstocks
+  fetchingallstocks,
+    fetchingsinglestock
 }

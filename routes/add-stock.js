@@ -8,4 +8,7 @@ router.post('/new-stock', stockcontrollers.savingnewstock);
 // Fetching all the stock
 router.get('/all-stocks', stockcontrollers.fetchingallstocks);
 
+// Fetching single stock route
+router.get('/single-stock/:id', stockcontrollers.fetchingsinglestock)
+
 module.exports = router;
