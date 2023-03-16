@@ -20,4 +20,7 @@ router.get('/supervisors', staffcontrollers.fetchingsupervisors);
 // Attendants route
 router.get('/attendants', staffcontrollers.fetchingattendants);
 
+// Fetching single staff details
+router.get('/staff/:id', staffcontrollers.fetchingsinglestaff)
+
 module.exports = router;
