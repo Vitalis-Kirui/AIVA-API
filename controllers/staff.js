@@ -126,11 +126,33 @@ const fetchingattendants = (req, res) => {
 
 };
 
+// Fetching a single staff
+const fetchingsinglestaff = (req, res) => {
+    
+    const id = req.params.id;
+
+    Staff.findById(id, (error, success) => {
+        if (error) {
+            res.json({
+                success: false,
+                message:"There was an error fetching staff details"
+            })
+        }
+        else {
+            res.json({
+                success: true,
+                staffdata: success
+            })
+        }
+    })
+}
+
 module.exports = {
     newstaff,
     allstaffs,
     fetchingceos,
     fetchingmanagement,
     fetchingsupervisors,
-    fetchingattendants
+    fetchingattendants,
+    fetchingsinglestaff
 }
