@@ -131,20 +131,21 @@ const fetchingsinglestaff = (req, res) => {
     
     const id = req.params.id;
 
-    Staff.findById(id, (error, success) => {
-        if (error) {
-            res.json({
-                success: false,
-                message:"There was an error fetching staff details"
-            })
-        }
-        else {
+    Staff.find({ _id: id })
+        .then((success) => {
             res.json({
                 success: true,
-                staffdata: success
-            })
-        }
+                staffdata : success
+                })
+        })
+        .catch((error) => {
+            res.json({
+                success: false,
+                message: "There an error fetchin staff data",
+                error: error.message
+        })
     })
+    
 }
 
 module.exports = {
