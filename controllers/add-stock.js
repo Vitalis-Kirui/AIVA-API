@@ -72,8 +72,31 @@ const fetchingsinglestock = (req, res) => {
     });
 };
 
+// Deleting a stock
+const deletestock = (req, res) => {
+
+  let id = req.params.id;
+
+  Stocks.findByIdAndDelete(id)
+    .then((success) => {
+      res.json({
+        success: true,
+        message:"The stock was deleted successfully"
+        })
+    })
+    .catch((error) => {
+      res.json({
+        success: false,
+        message: "There was an error deleting the stock",
+        error:error.message
+    })
+  })
+  
+}
+
 module.exports = {
     savingnewstock,
-  fetchingallstocks,
-    fetchingsinglestock
+    fetchingallstocks,
+  fetchingsinglestock,
+    deletestock
 }
