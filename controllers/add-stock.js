@@ -37,9 +37,18 @@ const fetchingallstocks = (req, res) => {
         .then((stocks) => { 
 
             let totalstocks = stocks.length;
+            let totalBuyingPrice = 0;
+            let totalSellingPrice = 0;
+
+            stocks.forEach(stock => {
+              totalBuyingPrice += stock.quantity * stock.buyingprice;
+              totalSellingPrice += stock.quantity * stock.sellingprice;
+            });
             res.json({
                 total: totalstocks,
-                stocks: stocks
+                stocks: stocks,
+                totalbuyingprice:totalBuyingPrice,
+                totalsellingprice:totalSellingPrice
             })
                 })
                 
