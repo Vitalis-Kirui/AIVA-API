@@ -167,6 +167,29 @@ const deletestaff = (req, res) => {
     });
 };
 
+// Updating staff details
+const updatestaff =(req, res) =>{
+
+  const id = req.params.id;
+
+  const newstaffdata = req.body;
+
+  Staff.findByIdAndUpdate(id, newstaffdata)
+      .then((success)=>{
+        res.json({
+          success:true,
+          message:"Staff updated successfully"
+        })
+      })
+      .catch((error)=>{
+        res.json({
+          success:false,
+          message:"Couldn't update staff"
+        })
+      });
+
+};
+
 module.exports = {
   newstaff,
   allstaffs,
@@ -175,5 +198,6 @@ module.exports = {
   fetchingsupervisors,
   fetchingattendants,
   fetchingsinglestaff,
-  deletestaff
+  deletestaff,
+  updatestaff
 };

@@ -15,6 +15,6 @@ router.get('/single-stock/:id', stockcontrollers.fetchingsinglestock);
 router.delete('/delete-stock/:id', stockcontrollers.deletestock);
 
 // Updating stock route
-router.put('/update-stock/:id', stockcontrollers);
+router.put('/update-stock/:id', stockcontrollers.updatestock);
 
 module.exports = router;

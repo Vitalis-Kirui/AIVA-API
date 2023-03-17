@@ -26,4 +26,7 @@ router.get('/staff/:id', staffcontrollers.fetchingsinglestaff);
 // Deleting a single staff
 router.delete('/staff/:id', staffcontrollers.deletestaff);
 
+// Updating staff data
+router.put('/staff/:id', staffcontrollers.updatestaff);
+
 module.exports = router;
