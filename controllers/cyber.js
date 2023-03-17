@@ -32,7 +32,7 @@ const allcyberservices = (req, res) => {
 
         res.json({
           total: totalservices,
-          cyberservices: registeredservices,
+          cyberservices: registeredservices
         });
       })
 
@@ -53,7 +53,13 @@ const todaycyberservices = (req, res) => {
 
             let totalservices = todaycyberservices.length;
 
-            res.json({ total: totalservices, cyberservices: todaycyberservices })
+            let dailytotal = 0;
+
+            todaycyberservices.forEach((service) => {
+              dailytotal += service.totalcost;
+            });
+
+            res.json({ total: totalservices, cyberservices: todaycyberservices, todaystotal:dailytotal });
         })
         .catch((error) => {
             console.log(error)
