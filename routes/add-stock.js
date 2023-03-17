@@ -11,7 +11,10 @@ router.get('/all-stocks', stockcontrollers.fetchingallstocks);
 // Fetching single stock route
 router.get('/single-stock/:id', stockcontrollers.fetchingsinglestock);
 
-// Dleting stock route
+// Deleting stock route
 router.delete('/delete-stock/:id', stockcontrollers.deletestock);
+
+// Updating stock route
+router.put('/update-stock/:id', stockcontrollers);
 
 module.exports = router;

@@ -94,9 +94,35 @@ const deletestock = (req, res) => {
   
 }
 
+// Update stock
+const updatestock = (req, res) =>{
+
+  const stockid = req.params.id;
+
+  const newstockdata = req.body;
+
+  Stocks.findByIdAndUpdate(stockid, newstockdata)
+      .then((success) =>{
+
+        res.json({
+          success:true,
+          message:"Stock updated successfully"
+        })
+
+      })
+      .catch((error) =>{
+        res.json({
+          success:false,
+          message:"Error updating stock"
+        })
+      })
+
+}
+
 module.exports = {
     savingnewstock,
     fetchingallstocks,
-  fetchingsinglestock,
-    deletestock
+    fetchingsinglestock,
+    deletestock,
+    updatestock
 }

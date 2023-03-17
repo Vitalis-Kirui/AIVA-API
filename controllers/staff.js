@@ -134,7 +134,6 @@ const fetchingsinglestaff = (req, res) => {
     Staff.find({ _id: id })
         .then((success) => {
             res.json({
-                success: true,
                 staffdata : success
                 })
         })
