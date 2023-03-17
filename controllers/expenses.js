@@ -26,12 +26,19 @@ const newexpense = async (req, res) => {
 const allexpenses = (req, res) => {
   Expenses.find()
     .sort({ createdAt: 1 })
-    .then((registeredexpense) => {
-      let totalexpenses = registeredexpense.length;
+    .then((registeredexpenses) => {
+      let totalexpenses = registeredexpenses.length;
+
+      let grandtotalexpenses = 0;
+
+      registeredexpenses.forEach((expense) => {
+        grandtotalexpenses +=  expense.totalcost;
+      });
 
       res.json({
         total: totalexpenses,
-        expenses: registeredexpense,
+        expenses: registeredexpenses,
+        grandtotal: grandtotalexpenses,
       });
     })
 
