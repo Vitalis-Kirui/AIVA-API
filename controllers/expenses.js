@@ -60,10 +60,17 @@ const todayexpenses = (req, res) => {
     },
   })
     .sort({ createdAt: -1 })
-    .then((todayexpsense) => {
-      let totalexpenses = todayexpsense.length;
+    .then((todayexpense) => {
+      let totalexpenses = todayexpense.length;
 
-      res.json({ total: totalexpenses, expenses: todayexpsense });
+      let totalcost = 0;
+
+      todayexpense.forEach((expense) => {
+        totalcost += expense.totalcost;
+
+      });
+
+      res.json({ total: totalexpenses, expenses: todayexpense, todaystotal: totalcost });
     })
     .catch((error) => {
       console.log(error);
