@@ -30,9 +30,16 @@ const allcyberservices = (req, res) => {
       .then((registeredservices) => {
         let totalservices = registeredservices.length;
 
+        let grandtotal =0;
+
+      registeredservices.forEach((service) => {
+        grandtotal += service.totalcost;
+      });
+
         res.json({
           total: totalservices,
-          cyberservices: registeredservices
+          cyberservices: registeredservices,
+          grandtotal : grandtotal
         });
       })
 
