@@ -69,25 +69,23 @@ const allsales = (req, res) => {
   Sales.find()
     .sort({ createdAt: 1 })
     .then((registeredsales) => {
-
       let totalsales = registeredsales.length;
-      let totalstocksold =0;
-      let  totalbuyingprice =0;
-      let totalsellingprice =0;
+      let totalstocksold = 0;
+      let totalbuyingprice = 0;
+      let totalsellingprice = 0;
 
-      registeredsales.forEach((sale) =>{
-        totalstocksold +=sale.quantity;
+      registeredsales.forEach((sale) => {
+        totalstocksold += sale.quantity;
         totalbuyingprice += sale.buyingtotal;
-        totalsellingprice += sale.clienttotal;;
-
-      })
+        totalsellingprice += sale.clienttotal;
+      });
 
       res.json({
         total: totalsales,
         sales: registeredsales,
-        stocksold:totalstocksold,
-        stocksoldworth:totalbuyingprice,
-        totalearnings:totalsellingprice
+        stocksold: totalstocksold,
+        stocksoldworth: totalbuyingprice,
+        totalearnings: totalsellingprice,
       });
     })
 
@@ -111,24 +109,23 @@ const todaysales = (req, res) => {
     .sort({ createdAt: -1 })
     .then((todaysales) => {
       let totalsales = todaysales.length;
-      let totalstocksold =0;
-      let  totalbuyingprice =0;
-      let totalsellingprice =0;
+      let totalstocksold = 0;
+      let totalbuyingprice = 0;
+      let totalsellingprice = 0;
 
-      todaysales.forEach((sale) =>{
-        totalstocksold +=sale.quantity;
+      todaysales.forEach((sale) => {
+        totalstocksold += sale.quantity;
         totalbuyingprice += sale.buyingtotal;
-        totalsellingprice += sale.clienttotal;;
+        totalsellingprice += sale.clienttotal;
+      });
 
-      })
-
-      res.json({ 
-        total: totalsales, 
+      res.json({
+        total: totalsales,
         sales: todaysales,
-        stocksold:totalstocksold,
-        stocksoldworth:totalbuyingprice,
-        totalearnings:totalsellingprice
-       });
+        stocksold: totalstocksold,
+        stocksoldworth: totalbuyingprice,
+        totalearnings: totalsellingprice,
+      });
     })
     .catch((error) => {
       console.log(error);
