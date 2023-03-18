@@ -25,6 +25,15 @@ const salesmodel = new schema({
     },
     transactioncode: {
         type: String
+    },
+    clienttotal:{
+        type: Number
+    },
+    buyingtotal:{
+        type: Number
+    },
+    projection:{
+        type: Number
     }
 },
     {
