@@ -3,6 +3,10 @@ const schema = mongoose.Schema;
 
 // Sales model
 const salesmodel = new schema({
+    stock: {
+        type: schema.Types.ObjectId,
+        ref: 'Stock'
+      },
     clientsname: {
         type: String,
         require: true

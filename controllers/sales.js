@@ -1,21 +1,56 @@
 const Sales = require("../models/sales");
+const Stock = require("../models/add-stock");
 
 // Saving new sale
 const newsale = async (req, res) => {
 
-    try {
-        const salesdetails = req.body;
+  const saledetails = req.body;
 
-        const newsale = new Sales(salesdetails);
+  const salequantity = saledetails.quantity;
+
+  const stocksold = saledetails.productname;
+
+    try {
+        // Finding stock being sold
+        const stock = await Stock.find({productname: stocksold});
+
+         // Ensure the stock was found
+        if (!stock) {
+          return res.status(400).json({ message: 'Stock not found' });
+        }
+
+        // Checking if stock is enough
+        if(stock[0].quantity<salequantity){
+          return res.status(400).json({ error: 'Not enough stock available' });
+        }
+        
+        // Deduct stock sold
+        stock[0].quantity -= salequantity;
+
+        await stock[0].save();
+
+        // Sales calculations
+        const sellingprice = stock[0].sellingprice;
+        const buyingprice = stock[0]. buyingprice;
+
+        const clientcost = salequantity * sellingprice;
+
+        const buyingcost = salequantity * buyingprice;
+
+        const projection = clientcost - buyingcost;
+
+        const newsale = new Sales(saledetails);
 
         await newsale.save();
 
         res.json({
             success: true,
-            message : "New sale registered successfully"
+            message : "New sale registered successfully",
+            clientpaying: clientcost,
+            buyingcost: buyingcost,
+            projection: projection,
+            stock: stock
         })
-
-
         
     }
     catch (error) {
