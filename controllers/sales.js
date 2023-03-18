@@ -39,17 +39,22 @@ const newsale = async (req, res) => {
 
         const projection = clientcost - buyingcost;
 
-        const newsale = new Sales(saledetails);
+        const newsale = new Sales({
+          clientsname:saledetails.clientsname,
+          productname:saledetails.productname,
+          quantity:saledetails.quantity,
+          payment:saledetails.payment,
+          transactioncode:saledetails.transactioncode,
+          clienttotal:clientcost,
+          buyingtotal:buyingcost,
+          projection:projection
+        });
 
         await newsale.save();
 
         res.json({
             success: true,
-            message : "New sale registered successfully",
-            clientpaying: clientcost,
-            buyingcost: buyingcost,
-            projection: projection,
-            stock: stock
+            message : "New sale registered successfully"
         })
         
     }
