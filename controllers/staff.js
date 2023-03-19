@@ -190,6 +190,29 @@ const updatestaff =(req, res) =>{
 
 };
 
+// Login to the system
+const startsession = (req, res) =>{
+
+  const userid = req.body;
+
+  Staff.findOne({nationalid: userid})
+      .then((staff) =>{
+        res.json({
+          success:true,
+          staff:staff
+        })
+      })
+      .catch((error)=>{
+        res.json({
+          success:false, 
+          message:"User not found",
+        error:error.message
+      });
+
+      });
+
+};
+
 module.exports = {
   newstaff,
   allstaffs,
@@ -199,5 +222,6 @@ module.exports = {
   fetchingattendants,
   fetchingsinglestaff,
   deletestaff,
-  updatestaff
+  updatestaff,
+  startsession
 };
