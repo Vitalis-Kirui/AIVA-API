@@ -193,12 +193,13 @@ const updatestaff =(req, res) =>{
 // Login to the system
 const startsession = (req, res) =>{
 
-  const userid = req.body;
+  const userid = req.query.nationalid;
 
-  Staff.findOne({nationalid: userid})
+  Staff.find({nationalid: userid})
       .then((staff) =>{
         res.json({
           success:true,
+          userid: userid,
           staff:staff
         })
       })

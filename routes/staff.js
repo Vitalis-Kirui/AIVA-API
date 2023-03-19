@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const staffcontrollers = require('../controllers/staff');
 
-// Start session
-router.get('/start-session', staffcontrollers.startsession);
-
 // New staff route
 router.post('/new-staff', staffcontrollers.newstaff);
 
@@ -31,5 +28,8 @@ router.delete('/staff/:id', staffcontrollers.deletestaff);
 
 // Updating staff data
 router.put('/staff/:id', staffcontrollers.updatestaff);
+
+// Start session
+router.get('/start-session', staffcontrollers.startsession);
 
 module.exports = router;
