@@ -53,7 +53,7 @@ const allexpenses = (req, res) => {
 
 // Today's expenses
 const todayexpenses = (req, res) => {
-  
+
   const startofday = new Date();
   startofday.setHours(0, 0, 0, 0); // Set time to midnight
 
@@ -84,8 +84,35 @@ const todayexpenses = (req, res) => {
     });
 };
 
+// Getting expenses by date
+const getexpensesbydate = async(req, res) => {
+
+  const date = req.query.date;
+
+  //Date input is in ISO format (YYYY-MM-DD)
+  const startofday = new Date(`${date}T00:00:00.000Z`);
+  const endofday = new Date(`${date}T23:59:59.999Z`);
+
+  try {
+    const expenses = await Expenses.find({
+      createdAt: {
+        $gte: startofday,
+        $lte: endofday,
+      },
+    });
+
+    res.status(200).json(expenses);
+
+  } 
+  catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+
+};
+
 module.exports = {
   newexpense,
   allexpenses,
   todayexpenses,
+  getexpensesbydate
 };

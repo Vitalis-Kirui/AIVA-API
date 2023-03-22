@@ -11,5 +11,8 @@ router.get('/all-expenses', expensescontrollers.allexpenses);
 // Today expenses route
 router.get('/today-expenses', expensescontrollers.todayexpenses);
 
+// Expenses by date route
+router.get('/by-date', expensescontrollers.getexpensesbydate);
+
 
 module.exports = router;
