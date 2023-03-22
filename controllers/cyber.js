@@ -87,8 +87,35 @@ const todaycyberservices = (req, res) => {
     });
 };
 
+// Getting services by date
+const getservicesbydate = async(req, res) => {
+
+  const date = req.query.date;
+
+  //Date input is in ISO format (YYYY-MM-DD)
+  const startofday = new Date(`${date}T00:00:00.000Z`);
+  const endofday = new Date(`${date}T23:59:59.999Z`);
+
+  try {
+    const cyberservices = await Cyber.find({
+      createdAt: {
+        $gte: startofday,
+        $lte: endofday,
+      },
+    });
+
+    res.status(200).json(cyberservices);
+
+  } 
+  catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+
+};
+
 module.exports = {
   newcyberservice,
   allcyberservices,
   todaycyberservices,
+  getservicesbydate
 };
