@@ -139,8 +139,35 @@ const todaysales = (req, res) => {
     });
 };
 
+// Getting sales by date
+const getSalesByDate = async(req, res) => {
+
+  const { date } = req.body;
+
+  //Date input is in ISO format (YYYY-MM-DD)
+  const startofday = new Date(`${date}T00:00:00.000Z`);
+  const endofday = new Date(`${date}T23:59:59.999Z`);
+
+  try {
+    const sales = await Sales.find({
+      createdAt: {
+        $gte: startofday,
+        $lte: endofday,
+      },
+    });
+
+    res.status(200).json(sales);
+
+  } 
+  catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+
+};
+
 module.exports = {
   newsale,
   allsales,
   todaysales,
+  getSalesByDate
 };
