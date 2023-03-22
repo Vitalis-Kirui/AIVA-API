@@ -142,7 +142,7 @@ const todaysales = (req, res) => {
 // Getting sales by date
 const getSalesByDate = async(req, res) => {
 
-  const { date } = req.body;
+  const date = req.query.date;
 
   //Date input is in ISO format (YYYY-MM-DD)
   const startofday = new Date(`${date}T00:00:00.000Z`);

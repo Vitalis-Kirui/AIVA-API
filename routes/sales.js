@@ -12,6 +12,6 @@ router.get('/all-sales', salescontrollers.allsales);
 router.get('/today-sales', salescontrollers.todaysales);
 
 // Sales by date route
-router.post('/by-date', salescontrollers.getSalesByDate);
+router.get('/by-date', salescontrollers.getSalesByDate);
 
 module.exports = router;
