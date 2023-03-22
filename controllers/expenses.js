@@ -53,10 +53,17 @@ const allexpenses = (req, res) => {
 
 // Today's expenses
 const todayexpenses = (req, res) => {
+  
+  const startofday = new Date();
+  startofday.setHours(0, 0, 0, 0); // Set time to midnight
+
+  const endofday = new Date();
+  endofday.setHours(23, 59, 59, 999); // Set time to just before midnight
+
   Expenses.find({
     createdAt: {
-      $lt: new Date(),
-      $gt: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
+      $gte: startofday,
+      $lte: endofday,
     },
   })
     .sort({ createdAt: -1 })
