@@ -1,4 +1,4 @@
-const Staff = require('../models/staff');
+const Staff = require("../models/staff");
 
 // Adding new staff
 const newstaff = async (req, res) => {
@@ -34,118 +34,96 @@ const newstaff = async (req, res) => {
 
 // Fetching all the staffs
 const allstaffs = (req, res) => {
+  Staff.find()
+    .sort({ firstname: 1 })
+    .then((staffs) => {
+      const totalstaffs = staffs.length;
 
-    Staff.find()
-        .sort({ 'firstname': 1 })
-        .then((staffs) => {
-
-            const totalstaffs = staffs.length;
-
-            res.json({
-                success: true,
-                total: totalstaffs,
-                staffs: staffs
-            })
-            
-        })
-        .catch((error) => {
-            res.json({
-                success: false,
-                message: "There was an error fetching staffs details.",
-                error: error.message
-        })
+      res.json({
+        success: true,
+        total: totalstaffs,
+        staffs: staffs,
+      });
     })
-    
-}
+    .catch((error) => {
+      res.json({
+        success: false,
+        message: "There was an error fetching staffs details.",
+        error: error.message,
+      });
+    });
+};
 
 // Fetching staffs with CEO rank | role
-const fetchingceos = (req, res) => { 
-
-    Staff.find({ role: 'CEO' })
-        .sort({ 'firstname': 1 })
-        .then((ceostaffs) => {
-
-            res.json({ok : true, CEOs : ceostaffs})
-            
-        })
-        .catch((error) => {
-            res.json({ ok: false, message: "There was an error fetching data" })
-            console.log(error)
+const fetchingceos = (req, res) => {
+  Staff.find({ role: "CEO" })
+    .sort({ firstname: 1 })
+    .then((ceostaffs) => {
+      res.json({ ok: true, CEOs: ceostaffs });
     })
-
+    .catch((error) => {
+      res.json({ ok: false, message: "There was an error fetching data" });
+      console.log(error);
+    });
 };
 
 // Fetching management staffs
-const fetchingmanagement = (req, res) => { 
-
-    Staff.find({ role: 'management' })
-        .sort({ 'firstname': 1 })
-        .then((managementstaffs) => {
-
-            res.json({ok : true, management : managementstaffs})
-            
-        })
-        .catch((error) => {
-            res.json({ ok: false, message: "There was an error fetching data" })
-            console.log(error)
+const fetchingmanagement = (req, res) => {
+  Staff.find({ role: "management" })
+    .sort({ firstname: 1 })
+    .then((managementstaffs) => {
+      res.json({ ok: true, management: managementstaffs });
     })
-
+    .catch((error) => {
+      res.json({ ok: false, message: "There was an error fetching data" });
+      console.log(error);
+    });
 };
 
 // Fetching supervisor staffs
-const fetchingsupervisors = (req, res) => { 
-
-    Staff.find({ role: 'supervisor' })
-        .sort({ 'firstname': 1 })
-        .then((supervisors) => {
-
-            res.json({ok : true, supervisors : supervisors})
-            
-        })
-        .catch((error) => {
-            res.json({ ok: false, message: "There was an error fetching data" })
-            console.log(error)
+const fetchingsupervisors = (req, res) => {
+  Staff.find({ role: "supervisor" })
+    .sort({ firstname: 1 })
+    .then((supervisors) => {
+      res.json({ ok: true, supervisors: supervisors });
     })
-
+    .catch((error) => {
+      res.json({ ok: false, message: "There was an error fetching data" });
+      console.log(error);
+    });
 };
 
 // Fetching attendants
-const fetchingattendants = (req, res) => { 
-
-    Staff.find({ role: 'attendant' })
-        .sort({ 'firstname': 1 })
-        .then((attendants) => {
-
-            res.json({ok : true, attendants : attendants})
-            
-        })
-        .catch((error) => {
-            res.json({ ok: false, message: "There was an error fetching data" })
-            console.log(error)
+const fetchingattendants = (req, res) => {
+  Staff.find({ role: "attendant" })
+    .sort({ firstname: 1 })
+    .then((attendants) => {
+      res.json({ ok: true, attendants: attendants });
     })
-
+    .catch((error) => {
+      res.json({ ok: false, message: "There was an error fetching data" });
+      console.log(error);
+    });
 };
 
 // Fetching a single staff
 const fetchingsinglestaff = (req, res) => {
-    
-    const id = req.params.id;
+  const id = req.params.id;
 
-    Staff.find({ _id: id })
-        .then((success) => {
-            res.json({
-                staffdata : success
-                })
-        })
-        .catch((error) => {
-            res.json({
-                success: false,
-                message: "There an error fetchin staff data",
-                error: error.message
-        })
+  Staff.find({ _id: id })
+    .then((success) => {
+      res.json({
+        staffdata: success,
+      });
     })
-    
-}
+    .catch((error) => {
+      res.json({
+        success: false,
+        message: "There an error fetchin staff data",
+        error: error.message,
+      });
+    });
+};
 
 // Deleting staff data
 const deletestaff = (req, res) => {
@@ -168,50 +146,45 @@ const deletestaff = (req, res) => {
 };
 
 // Updating staff details
-const updatestaff =(req, res) =>{
-
+const updatestaff = (req, res) => {
   const id = req.params.id;
 
   const newstaffdata = req.body;
 
   Staff.findByIdAndUpdate(id, newstaffdata)
-      .then((success)=>{
-        res.json({
-          success:true,
-          message:"Staff updated successfully"
-        })
-      })
-      .catch((error)=>{
-        res.json({
-          success:false,
-          message:"Couldn't update staff"
-        })
+    .then((success) => {
+      res.json({
+        success: true,
+        message: "Staff updated successfully",
       });
-
+    })
+    .catch((error) => {
+      res.json({
+        success: false,
+        message: "Couldn't update staff",
+      });
+    });
 };
 
 // Login to the system
-const startsession = (req, res) =>{
-
+const startsession = async (req, res) => {
   const userid = req.query.nationalid;
 
-  Staff.find({nationalid: userid})
-      .then((staff) =>{
-        res.json({
-          success:true,
-          userid: userid,
-          staff:staff
-        })
-      })
-      .catch((error)=>{
-        res.json({
-          success:false, 
-          message:"User not found",
-        error:error.message
-      });
+  try {
+    const staff = await Staff.find({ nationalid: userid });
 
+    if (!staff) {
+      return res.status(404).json({ message: "Staff not found" });
+    } else {
+      res.status(200).json({
+        success: true,
+        staff: staff,
       });
-
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 module.exports = {
@@ -224,5 +197,5 @@ module.exports = {
   fetchingsinglestaff,
   deletestaff,
   updatestaff,
-  startsession
+  startsession,
 };
