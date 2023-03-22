@@ -1,11 +1,11 @@
-const Cyber = require('../models/cyber');
+const Cyber = require("../models/cyber");
 
 // Saving new cyber service
 const newcyberservice = async (req, res) => {
   try {
     const servicedata = req.body;
 
-    const cyberservice = new Cyber(servicedata,);
+    const cyberservice = new Cyber(servicedata);
 
     await cyberservice.save();
 
@@ -23,59 +23,72 @@ const newcyberservice = async (req, res) => {
 };
 
 // Fetching all registered cyber services
-const allcyberservices = (req, res) => { 
+const allcyberservices = (req, res) => {
+  Cyber.find()
+    .sort({ createdAt: 1 })
+    .then((registeredservices) => {
+      let totalservices = registeredservices.length;
 
-    Cyber.find()
-      .sort({ createdAt: 1 })
-      .then((registeredservices) => {
-        let totalservices = registeredservices.length;
-
-        let grandtotal =0;
+      let grandtotal = 0;
 
       registeredservices.forEach((service) => {
         grandtotal += service.totalcost;
       });
 
-        res.json({
-          total: totalservices,
-          cyberservices: registeredservices,
-          grandtotal : grandtotal
-        });
-      })
-
-      .catch((error) => {
-        console.log(error);
-        res.json({
-          message: "An error occurred while fetching cyber services",
-          error: error,
-        });
+      res.json({
+        total: totalservices,
+        cyberservices: registeredservices,
+        grandtotal: grandtotal,
       });
+    })
+
+    .catch((error) => {
+      console.log(error);
+      res.json({
+        message: "An error occurred while fetching cyber services",
+        error: error,
+      });
+    });
 };
 
 // Today's cyber services
-const todaycyberservices = (req, res) => { 
+const todaycyberservices = (req, res) => {
+  
+  const startofday = new Date();
+  startofday.setHours(0, 0, 0, 0); // Set time to midnight
 
-    Cyber.find({ createdAt: { $lt: new Date(), $gt: new Date(new Date().getTime() - (24 * 60 * 60 * 1000)) } }).sort({ createdAt: -1 })
-        .then((todaycyberservices) => {
+  const endofday = new Date();
+  endofday.setHours(23, 59, 59, 999); // Set time to just before midnight
 
-            let totalservices = todaycyberservices.length;
+  Cyber.find({
+    createdAt: {
+      $gte: startofday,
+      $lte: endofday,
+    },
+  })
+    .sort({ createdAt: -1 })
+    .then((todaycyberservices) => {
+      let totalservices = todaycyberservices.length;
 
-            let dailytotal = 0;
+      let dailytotal = 0;
 
-            todaycyberservices.forEach((service) => {
-              dailytotal += service.totalcost;
-            });
+      todaycyberservices.forEach((service) => {
+        dailytotal += service.totalcost;
+      });
 
-            res.json({ total: totalservices, cyberservices: todaycyberservices, todaystotal:dailytotal });
-        })
-        .catch((error) => {
-            console.log(error)
-         })
-
+      res.json({
+        total: totalservices,
+        cyberservices: todaycyberservices,
+        todaystotal: dailytotal,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 module.exports = {
-    newcyberservice,
-    allcyberservices,
-    todaycyberservices
-}
+  newcyberservice,
+  allcyberservices,
+  todaycyberservices,
+};
