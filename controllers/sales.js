@@ -156,7 +156,7 @@ const getSalesByDate = async(req, res) => {
       },
     });
 
-    res.status(200).json(sales);
+    res.status(200).json({sales});
 
   } 
   catch (err) {

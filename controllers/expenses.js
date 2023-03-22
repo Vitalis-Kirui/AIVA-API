@@ -101,7 +101,7 @@ const getexpensesbydate = async(req, res) => {
       },
     });
 
-    res.status(200).json(expenses);
+    res.status(200).json({expenses});
 
   } 
   catch (err) {

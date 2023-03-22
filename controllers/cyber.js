@@ -104,7 +104,7 @@ const getservicesbydate = async(req, res) => {
       },
     });
 
-    res.status(200).json(cyberservices);
+    res.status(200).json({cyberservices});
 
   } 
   catch (err) {
