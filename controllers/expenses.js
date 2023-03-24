@@ -1,4 +1,15 @@
 const Expenses = require("../models/expenses");
+const nodemailer = require("nodemailer");
+const configvariables = require("../config/config-variables");
+
+// create reusable transporter object using the default SMTP transport
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: configvariables.sendingemail,
+    pass: configvariables.emailpassword,
+  },
+});
 
 // Saving new expense
 const newexpense = async (req, res) => {
@@ -9,15 +20,25 @@ const newexpense = async (req, res) => {
 
     await expense.save();
 
-    res.status(201).json({
-      success: true,
-      message: "Expense saved successfully",
+    // define email options
+    let mailOptions = {
+      from: configvariables.sendingemail,
+      to: configvariables.recieveremail,
+      subject: "New Expense made",
+      text: `A new expense has been made with the following details:\n\n${expense}`,
+    };
+
+    // send email using the transporter object
+    let info = await transporter.sendMail(mailOptions);
+
+    console.log("Email notification sent: " + info.response);
+    res.status(200).send({
+      message: "Expense saved and email notification sent.",
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error saving the expense",
-      error: error.message,
+    console.log(error);
+    res.status(500).send({
+      message: "There was an error saving the expense.",
     });
   }
 };
@@ -32,7 +53,7 @@ const allexpenses = (req, res) => {
       let grandtotalexpenses = 0;
 
       registeredexpenses.forEach((expense) => {
-        grandtotalexpenses +=  expense.totalcost;
+        grandtotalexpenses += expense.totalcost;
       });
 
       res.json({
@@ -53,7 +74,6 @@ const allexpenses = (req, res) => {
 
 // Today's expenses
 const todayexpenses = (req, res) => {
-
   const startofday = new Date();
   startofday.setHours(0, 0, 0, 0); // Set time to midnight
 
@@ -74,10 +94,13 @@ const todayexpenses = (req, res) => {
 
       todayexpense.forEach((expense) => {
         totalcost += expense.totalcost;
-
       });
 
-      res.json({ total: totalexpenses, expenses: todayexpense, todaystotal: totalcost });
+      res.json({
+        total: totalexpenses,
+        expenses: todayexpense,
+        todaystotal: totalcost,
+      });
     })
     .catch((error) => {
       console.log(error);
@@ -85,8 +108,7 @@ const todayexpenses = (req, res) => {
 };
 
 // Getting expenses by date
-const getexpensesbydate = async(req, res) => {
-
+const getexpensesbydate = async (req, res) => {
   const date = req.query.date;
 
   //Date input is in ISO format (YYYY-MM-DD)
@@ -101,18 +123,15 @@ const getexpensesbydate = async(req, res) => {
       },
     });
 
-    res.status(200).json({expenses});
-
-  } 
-  catch (err) {
+    res.status(200).json({ expenses });
+  } catch (err) {
     res.status(500).json({ message: err.message });
   }
-
 };
 
 module.exports = {
   newexpense,
   allexpenses,
   todayexpenses,
-  getexpensesbydate
+  getexpensesbydate,
 };
