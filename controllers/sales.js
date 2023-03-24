@@ -1,5 +1,15 @@
 const Sales = require("../models/sales");
 const Stock = require("../models/add-stock");
+const nodemailer = require("nodemailer");
+
+// create reusable transporter object using the default SMTP transport
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "vitaliskirui1@gmail.com",
+    pass: "fsruiiqlpsdhhssu",
+  },
+});
 
 // Saving new sale
 const newsale = async (req, res) => {
@@ -38,7 +48,7 @@ const newsale = async (req, res) => {
 
     const projection = clientcost - buyingcost;
 
-    const newsale = new Sales({
+    const newsaledetails = new Sales({
       clientsname: saledetails.clientsname,
       productname: saledetails.productname,
       quantity: saledetails.quantity,
@@ -49,17 +59,27 @@ const newsale = async (req, res) => {
       projection: projection,
     });
 
-    await newsale.save();
+    await newsaledetails.save();
 
-    res.json({
-      success: true,
-      message: "New sale registered successfully",
+    // define email options
+    let mailOptions = {
+      from: "vitaliskirui1@gmail.com",
+      to: "maybethisiswhereibelong@gmail.com",
+      subject: "New sale made",
+      text: `A new sale has been made with the following details:\n\n${newsaledetails}`,
+    };
+
+    // send email using the transporter object
+    let info = await transporter.sendMail(mailOptions);
+
+    console.log("Email notification sent: " + info.response);
+    res.status(200).send({
+      message: "Sale saved and email notification sent.",
     });
   } catch (error) {
-    res.json({
-      success: false,
-      message: "There was an error saving the sale",
-      error: error.message,
+    console.log(error);
+    res.status(500).send({
+      message: "There was an error saving the sale.",
     });
   }
 };
@@ -100,7 +120,6 @@ const allsales = (req, res) => {
 
 // Today's sales
 const todaysales = (req, res) => {
-
   const startofday = new Date();
   startofday.setHours(0, 0, 0, 0); // Set time to midnight
 
@@ -140,8 +159,7 @@ const todaysales = (req, res) => {
 };
 
 // Getting sales by date
-const getSalesByDate = async(req, res) => {
-
+const getSalesByDate = async (req, res) => {
   const date = req.query.date;
 
   //Date input is in ISO format (YYYY-MM-DD)
@@ -156,18 +174,15 @@ const getSalesByDate = async(req, res) => {
       },
     });
 
-    res.status(200).json({sales});
-
-  } 
-  catch (err) {
+    res.status(200).json({ sales });
+  } catch (err) {
     res.status(500).json({ message: err.message });
   }
-
 };
 
 module.exports = {
   newsale,
   allsales,
   todaysales,
-  getSalesByDate
+  getSalesByDate,
 };
