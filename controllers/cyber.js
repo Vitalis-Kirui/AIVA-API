@@ -1,4 +1,15 @@
 const Cyber = require("../models/cyber");
+const nodemailer = require("nodemailer");
+const configvariables = require("../config/config-variables");
+
+// create reusable transporter object using the default SMTP transport
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: configvariables.sendingemail,
+    pass: configvariables.emailpassword,
+  },
+});
 
 // Saving new cyber service
 const newcyberservice = async (req, res) => {
@@ -9,15 +20,25 @@ const newcyberservice = async (req, res) => {
 
     await cyberservice.save();
 
-    res.status(201).json({
-      success: true,
-      message: "Service saved successfully",
+    // define email options
+    let mailOptions = {
+      from: configvariables.sendingemail,
+      to: configvariables.recieveremail,
+      subject: "New Cyber Service Registered",
+      text: `A new cyber service has been made with the following details:\n\n${cyberservice}`,
+    };
+
+    // send email using the transporter object
+    let info = await transporter.sendMail(mailOptions);
+
+    console.log("Email notification sent: " + info.response);
+    res.status(200).send({
+      message: "Cyber service saved and email notification sent.",
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error saving the service",
-      error: error.message,
+    console.log(error);
+    res.status(500).send({
+      message: "There was an error saving the cyber service.",
     });
   }
 };
@@ -53,7 +74,6 @@ const allcyberservices = (req, res) => {
 
 // Today's cyber services
 const todaycyberservices = (req, res) => {
-  
   const startofday = new Date();
   startofday.setHours(0, 0, 0, 0); // Set time to midnight
 
@@ -88,8 +108,7 @@ const todaycyberservices = (req, res) => {
 };
 
 // Getting services by date
-const getservicesbydate = async(req, res) => {
-
+const getservicesbydate = async (req, res) => {
   const date = req.query.date;
 
   //Date input is in ISO format (YYYY-MM-DD)
@@ -104,18 +123,15 @@ const getservicesbydate = async(req, res) => {
       },
     });
 
-    res.status(200).json({cyberservices});
-
-  } 
-  catch (err) {
+    res.status(200).json({ cyberservices });
+  } catch (err) {
     res.status(500).json({ message: err.message });
   }
-
 };
 
 module.exports = {
   newcyberservice,
   allcyberservices,
   todaycyberservices,
-  getservicesbydate
+  getservicesbydate,
 };

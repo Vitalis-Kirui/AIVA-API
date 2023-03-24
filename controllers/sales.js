@@ -64,7 +64,7 @@ const newsale = async (req, res) => {
 
     // define email options
     let mailOptions = {
-      from: "vitaliskirui1@gmail.com",
+      from: configvariables.sendingemail,
       to: configvariables.recieveremail,
       subject: "New sale made",
       text: `A new sale has been made with the following details:\n\n${newsaledetails}`,
