@@ -1,13 +1,14 @@
 const Sales = require("../models/sales");
 const Stock = require("../models/add-stock");
 const nodemailer = require("nodemailer");
+const configvariables = require("../config/config-variables");
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "vitaliskirui1@gmail.com",
-    pass: "fsruiiqlpsdhhssu",
+    user: configvariables.sendingemail,
+    pass: configvariables.emailpassword,
   },
 });
 
@@ -64,7 +65,7 @@ const newsale = async (req, res) => {
     // define email options
     let mailOptions = {
       from: "vitaliskirui1@gmail.com",
-      to: "maybethisiswhereibelong@gmail.com",
+      to: configvariables.recieveremail,
       subject: "New sale made",
       text: `A new sale has been made with the following details:\n\n${newsaledetails}`,
     };
