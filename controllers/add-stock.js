@@ -1,11 +1,13 @@
-const Stocks = require('../models/add-stock');
+const Stocks = require("../models/add-stock");
 
 // Saving new stock
 const savingnewstock = async (req, res) => {
   try {
     const productdata = req.body;
 
-    const existingProduct = await Stocks.findOne({ productname: productdata.productname});
+    const existingProduct = await Stocks.findOne({
+      productname: productdata.productname,
+    });
     if (existingProduct) {
       return res.status(409).json({
         success: false,
@@ -31,34 +33,33 @@ const savingnewstock = async (req, res) => {
 };
 
 // Fetching all the stocks
-const fetchingallstocks = (req, res) => { 
-    
-    Stocks.find().sort({productname : 1})
-        .then((stocks) => { 
+const fetchingallstocks = (req, res) => {
+  Stocks.find()
+    .sort({ productname: 1 })
+    .then((stocks) => {
+      let totalstocks = stocks.length;
+      let totalBuyingPrice = 0;
+      let totalSellingPrice = 0;
 
-            let totalstocks = stocks.length;
-            let totalBuyingPrice = 0;
-            let totalSellingPrice = 0;
+      stocks.forEach((stock) => {
+        totalBuyingPrice += stock.quantity * stock.buyingprice;
+        totalSellingPrice += stock.quantity * stock.sellingprice;
+      });
+      res.json({
+        total: totalstocks,
+        stocks: stocks,
+        totalbuyingprice: totalBuyingPrice,
+        totalsellingprice: totalSellingPrice,
+      });
+    })
 
-            stocks.forEach(stock => {
-              totalBuyingPrice += stock.quantity * stock.buyingprice;
-              totalSellingPrice += stock.quantity * stock.sellingprice;
-            });
-            res.json({
-                total: totalstocks,
-                stocks: stocks,
-                totalbuyingprice:totalBuyingPrice,
-                totalsellingprice:totalSellingPrice
-            })
-                })
-                
-        .catch(error => {
-                    console.log(error);
-                    res.json({
-                        message: 'An error occurred while fetching data for all stocks',
-                        error: error
-                    })
-        })
+    .catch((error) => {
+      console.log(error);
+      res.json({
+        message: "An error occurred while fetching data for all stocks",
+        error: error,
+      });
+    });
 };
 
 // Fetching a single stock
@@ -83,55 +84,49 @@ const fetchingsinglestock = (req, res) => {
 
 // Deleting a stock
 const deletestock = (req, res) => {
-
   let id = req.params.id;
 
   Stocks.findByIdAndDelete(id)
     .then((success) => {
       res.json({
         success: true,
-        message:"The stock was deleted successfully"
-        })
+        message: "The stock was deleted successfully",
+      });
     })
     .catch((error) => {
       res.json({
         success: false,
         message: "There was an error deleting the stock",
-        error:error.message
-    })
-  })
-  
-}
+        error: error.message,
+      });
+    });
+};
 
 // Update stock
-const updatestock = (req, res) =>{
-
+const updatestock = (req, res) => {
   const stockid = req.params.id;
 
   const newstockdata = req.body;
 
   Stocks.findByIdAndUpdate(stockid, newstockdata)
-      .then((success) =>{
-
-        res.json({
-          success:true,
-          message:"Stock updated successfully"
-        })
-
-      })
-      .catch((error) =>{
-        res.json({
-          success:false,
-          message:"Error updating stock"
-        })
-      })
-
-}
+    .then((success) => {
+      res.json({
+        success: true,
+        message: "Stock updated successfully",
+      });
+    })
+    .catch((error) => {
+      res.json({
+        success: false,
+        message: "Error updating stock",
+      });
+    });
+};
 
 module.exports = {
-    savingnewstock,
-    fetchingallstocks,
-    fetchingsinglestock,
-    deletestock,
-    updatestock
-}
+  savingnewstock,
+  fetchingallstocks,
+  fetchingsinglestock,
+  deletestock,
+  updatestock,
+};
